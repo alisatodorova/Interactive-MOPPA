@@ -18,6 +18,7 @@ if not os.path.isdir(FOLDER_PCS_GRID_CACHE):
     os.makedirs(FOLDER_PCS_GRID_CACHE)
 
 
+# pcs = Pareto coverage set
 def get_pcs_grid(ccs_size, num_objectives, eucledian_dist=0.05, min_size=100, seed=None):
 
     pcs_grid = np.empty((0, num_objectives))
