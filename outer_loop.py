@@ -42,6 +42,7 @@ def outer(G, S, T, d):
         points = tuple(p) #Contain the x- and y-values of the points
         bounds.append(points)
 
+    #TODO: Check if C is correct
     C = min(bounds, key=lambda points: (points[0], points[1])) #Candidate target,
     #where the lambda function that compares the tuples based on their first and second elements
 
@@ -55,11 +56,11 @@ def outer(G, S, T, d):
         p = inner_loop(t, G, S, T) #TODO: inner-loop
 
         #TODO: if vp improves in the target region
-        P.append(p)
-        #TODO: Compare p to p∗ and add comparison to the GP
-        if gp(p) > gp(p_star):
-            p_star = p
-        #TODO: Compute new candidate targets based on vp and add to C
+            P.append(p)
+            #TODO: Compare p to p∗ and add comparison to the GP
+            if gp(p) > gp(p_star):
+                p_star = p
+            #TODO: Compute new candidate targets based on vp and add to C
         #End If
     #End While
 
