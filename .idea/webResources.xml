@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebResourcesPaths">
+    <contentEntries>
+      <entry url="file://$PROJECT_DIR$">
+        <entryData>
+          <resourceRoots>
+            <path value="file://$PROJECT_DIR$/gp_utilities" />
+            <path value="file://$PROJECT_DIR$/lmzintgraf_gp_pref_elicit" />
+            <path value="file://$PROJECT_DIR$/Smaller set - radius 250m and 1000 nodes" />
+          </resourceRoots>
+        </entryData>
+      </entry>
+    </contentEntries>
+  </component>
+</project>

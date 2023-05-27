@@ -27,25 +27,20 @@ def outer(G, S, T, d):
     '''
 
     gp = gaussian_process.GPPairwise(num_objectives=2, std_noise=0.01, kernel_width=0.15, prior_mean_type='zero', seed=None) #Initialise the Gaussian process for 2 objectives
-    acq_fun = acquisition_function.DiscreteAcquirer(input_domain, query_type='ranking', seed, acquisition_type='expected improvement') #Initialise acquisition function
+    # acq_fun = acquisition_function.DiscreteAcquirer(input_domain, query_type='ranking', seed, acquisition_type='expected improvement') #Initialise acquisition function
     #TODO: input_domain and seed are what?
 
-    P = set() #Pareto set
-    bounds = []
+    P = []  # Pareto set
 
     # Path initialisation
-    for i in d: #TODO: Check how to work with objectives here.
-        p = nx.shortest_path(G, source=S, target=T, weight=i, method='dijkstra') #Dijkstra algorithm
+    for i in d:
+        p = nx.shortest_path(G, source=S, target=T, weight=i, method='dijkstra')  # Dijkstra algorithm
+        P.append(p)
 
-        # obj_val = G.nodes[p[-1]][i] #Objectives' values where -1 retrieves the value of the ending node in the path
-        P = P.add(p)
-        points = tuple(p) #Contain the x- and y-values of the points
-        bounds.append(points)
+    C = min(P, key=lambda p: (p[0], p[1])) #Candidate target, where the lambda function
+    # compares the tuples based on their first and second elements
 
-    #TODO: Check if C is correct
-    C = min(bounds, key=lambda points: (points[0], points[1])) #Candidate target,
-    #where the lambda function that compares the tuples based on their first and second elements
-
+    # User ranking: Compare paths in P and add comparisons to GP
     #TODO: Compare paths in P and add comparisons to GP
 
     p_star = max(P, key=lambda p: gp(p)) #path the user likes best and has the maximum a posteriori (MAP) estimate
@@ -56,10 +51,10 @@ def outer(G, S, T, d):
         p = inner_loop(t, G, S, T) #TODO: inner-loop
 
         #TODO: if vp improves in the target region
-            P.append(p)
-            #TODO: Compare p to p∗ and add comparison to the GP
-            if gp(p) > gp(p_star):
-                p_star = p
+        P.append(p)
+        #TODO: Compare p to p∗ and add comparison to the GP
+        if gp(p) > gp(p_star):
+            p_star = p
             #TODO: Compute new candidate targets based on vp and add to C
         #End If
     #End While
