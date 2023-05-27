@@ -5,4 +5,13 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PyNamespacePackagesService">
+    <option name="namespacePackageFolders">
+      <list>
+        <option value="$MODULE_DIR$/lmzintgraf_gp_pref_elicit" />
+        <option value="$MODULE_DIR$/lmzintgraf_gp_pref_elicit/gp_utilities" />
+        <option value="$MODULE_DIR$/lmzintgraf_gp_pref_elicit/pymodem" />
+      </list>
+    </option>
+  </component>
 </module>

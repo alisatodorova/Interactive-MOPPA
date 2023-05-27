@@ -4,7 +4,7 @@
 import numpy as np
 import sys
 sys.path.insert(0, '..')
-from gp_utilities import utils_data as utl_data
+from lmzintgraf_gp_pref_elicit.gp_utilities import utils_data as utl_data
 
 
 class DatasetPairwise:
@@ -15,7 +15,7 @@ class DatasetPairwise:
         """
         self.num_objectives = num_objectives
         self.datapoints = np.empty((0, self.num_objectives))
-        self.comparisons = np.empty((0, 2), dtype=np.int)
+        self.comparisons = np.empty((0, 2), dtype=int)
 
     def add_single_comparison(self, winner, loser):
         """
@@ -60,7 +60,7 @@ class DatasetPairwise:
 
         if not keep_prev_info:
             self.datapoints = np.empty((0, self.num_objectives))
-            self.comparisons = np.empty((0, 2), dtype=np.int)
+            self.comparisons = np.empty((0, 2), dtype=int)
 
         for cluster_idx in range(len(clusters)-1):
             clust1 = clusters[cluster_idx]

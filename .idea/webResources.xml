@@ -5,8 +5,6 @@
       <entry url="file://$PROJECT_DIR$">
         <entryData>
           <resourceRoots>
-            <path value="file://$PROJECT_DIR$/gp_utilities" />
-            <path value="file://$PROJECT_DIR$/lmzintgraf_gp_pref_elicit" />
             <path value="file://$PROJECT_DIR$/Smaller set - radius 250m and 1000 nodes" />
           </resourceRoots>
         </entryData>

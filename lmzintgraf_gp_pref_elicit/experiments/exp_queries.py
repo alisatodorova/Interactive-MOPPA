@@ -8,7 +8,7 @@ import numpy as np
 import os
 import sys
 sys.path.insert(0, '.')
-from gp_utilities import utils_experiment, utils_parameters
+from lmzintgraf_gp_pref_elicit.gp_utilities import utils_experiment, utils_parameters
 
 start_seed = 13
 num_queries = 25

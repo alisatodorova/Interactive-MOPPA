@@ -15,15 +15,17 @@ for more detail on how we compute the GP updates.
 import numpy as np
 from numpy.random import RandomState
 from scipy.stats import norm
+from lmzintgraf_gp_pref_elicit.gp_utilities import utils_data
+
 import sys
 sys.path.insert(0, '..')
-from gp_utilities import utils_data
 
 
 class GPPairwise:
     """
     Gaussian process with a probit likelihood for pairwise comparisons.
     """
+
     def __init__(self, num_objectives, std_noise=0.01, kernel_width=0.15, prior_mean_type='zero', seed=None):
         """
         :param num_objectives:      number of objectives of input for utility function we want to approximate
@@ -187,7 +189,7 @@ class GPPairwise:
         """
         x1 = utils_data.format_data(x1, self.num_objectives)
         x2 = utils_data.format_data(x2, self.num_objectives)
-        k = 0.8**2 * np.exp(-(1. / (2. * (self.kernel_width ** 2))) * np.linalg.norm(x1 - x2, axis=1) ** 2)
+        k = 0.8 ** 2 * np.exp(-(1. / (2. * (self.kernel_width ** 2))) * np.linalg.norm(x1 - x2, axis=1) ** 2)
         return k
 
     def _compute_hess_likelihood(self, z=None):
@@ -234,8 +236,8 @@ class GPPairwise:
         """
         h_x_m = np.array(self.comparisons[:, 0] == m, dtype=int) - np.array(self.comparisons[:, 1] == m, dtype=int)
         h_x_n = np.array(self.comparisons[:, 0] == n, dtype=int) - np.array(self.comparisons[:, 1] == n, dtype=int)
-        p = h_x_m * h_x_n * (np.exp(2.*z_logpdf - 2.*z_logcdf) + z * np.exp(z_logpdf - z_logcdf))
-        c = - np.sum(p) / (2 * self.std_noise**2)
+        p = h_x_m * h_x_n * (np.exp(2. * z_logpdf - 2. * z_logcdf) + z * np.exp(z_logpdf - z_logcdf))
+        c = - np.sum(p) / (2 * self.std_noise ** 2)
         return c
 
     def _compute_posterior(self):

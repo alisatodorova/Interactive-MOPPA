@@ -5,11 +5,11 @@ import os
 import numpy as np
 import sys
 sys.path.insert(0, '..')
-from gp_utilities import utils_parameters, utils_ccs
-from gp_utilities.utils_user import UserPreference
-import acquisition_function
-from dataset import DatasetPairwise
-from gaussian_process import GPPairwise
+from lmzintgraf_gp_pref_elicit.gp_utilities import utils_parameters, utils_ccs
+from lmzintgraf_gp_pref_elicit.gp_utilities.utils_user import UserPreference
+import lmzintgraf_gp_pref_elicit.acquisition_function as acquisition_function
+from lmzintgraf_gp_pref_elicit.dataset import DatasetPairwise
+from lmzintgraf_gp_pref_elicit.gaussian_process import GPPairwise
 
 # get the folder where we store the results
 PATH_RESULTS_DIR = os.path.join('../experiments/results')
@@ -49,11 +49,15 @@ class Experiment:
 
     def run(self, recalculate=False):
 
+        #TODO: The commented part below is not working. Saving the results in a folder is giving me a
+        # ValueError:setting an array element with a sequence.
+        # The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (7,) + inhomogeneous part.
+
         # get the path where we store the results and return this if they exist and we don't want to recalculate
-        path_result_file = os.path.join(PATH_RESULTS_DIR, utils_parameters.get_filename(self.params) + '.npy')
-        if (not recalculate) and os.path.exists(path_result_file):
-            print('loading...', path_result_file)
-            return np.load(path_result_file)
+        # path_result_file = os.path.join(PATH_RESULTS_DIR, utils_parameters.get_filename(self.params) + '.npy')
+        # if (not recalculate) and os.path.exists(path_result_file):
+        #     print('loading...', path_result_file)
+        #     return np.load(path_result_file)
 
         # keep track of the maximum utility found
         max_utility_per_query = np.empty(self.params['num queries'])
@@ -94,7 +98,8 @@ class Experiment:
 
         results = self.gather_results(max_utility_per_query)
 
-        np.save(path_result_file, results)
+        #TODO: not working for me:
+        # np.save(path_result_file, results)
 
         return results
 
