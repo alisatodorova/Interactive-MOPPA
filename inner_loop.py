@@ -4,6 +4,8 @@ Inner-loop: Finding a new path from the target region
 
 import outer_loop
 import networkx as nx
+
+
 def inner(t, G, S, T):
     """
     Finds a new path from the target region
