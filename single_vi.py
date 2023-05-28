@@ -27,10 +27,9 @@ def single_vi(graph, max_iter=1000, gamma=1.0, threshold=1e-8):
                 continue
             max_value = -np.inf
 
-            for action in graph[n]: #action=going from n to n′
-                n_next = action
-                cost = graph[n][action]
-                result = cost + gamma * v_n_copy[n_next]
+            for n_next in graph[n]:
+                cost = graph[n][n_next]
+                result = np.min(cost + gamma * v_n_copy[n_next])
                 max_value = max(max_value, result)
 
             v_n[n] = max_value
