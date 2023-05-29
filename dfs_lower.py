@@ -4,15 +4,19 @@ obtained from the Single-objective value iteration (i.e., single_vi.py)
 '''
 
 
-def dfs_lower(G, S, T, lower_bounds):
+def dfs_lower(G, S, T, lower_bounds, max_iter=None):
     """
     Finds the shortest path from S to T, guided by the lower bounds
     :param G: Multi-objective search graph G = (V, E)
     :param S: Starting node
     :param T: Terminating (ending) node
     :param lower_bounds: Lower bounds, obtained from the Single-objective value iteration (i.e., single_vi.py)
+    :param max_iter: Maximum iterations. By default (i.e., max_iter=None), the algorithm runs until convergence.
+    For experimenting with stopping criteria, set the max_iter to a number
     :return Shortest path
     """
+
+    i = 0  # track iterations of the algorithm
 
     stack = [(S, 0, [S])]  # (starting node, cost, path)
     # where cost is from previous_state to S, path is from S to current_state (i.e., S)
@@ -33,5 +37,10 @@ def dfs_lower(G, S, T, lower_bounds):
             stack.sort(key=lambda x: lower_bounds[x[0]],
                        reverse=True)  # Sorts in descending order w.r.t. the lower bound
 
-    print("Sorry! No solution was found!")
+        i += 1
+        if max_iter is not None and i >= max_iter:
+            print("The algorithm has reached the given maximum iterations, but has found no solution.")
+            return None
+
+    print("The algorithm has terminated, but no solution was found.")
     return None
