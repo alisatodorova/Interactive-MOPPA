@@ -1,6 +1,6 @@
 '''
 Depth-first search (DFS) algorithm, guided by the lower bounds,
-obtained from the Single-objective value iteration (i.e., single_vi.py)
+obtained from the Single-objective value iteration (i.e., single_vi_iter.py)
 '''
 
 
@@ -10,7 +10,7 @@ def dfs_lower(G, S, t, lower_bounds, max_iter=None):
     :param G: Multi-objective search graph G = (V, E)
     :param S: Starting node
     :param t: Target node
-    :param lower_bounds: Lower bounds, obtained from the Single-objective value iteration (i.e., single_vi.py)
+    :param lower_bounds: Lower bounds, obtained from the Single-objective value iteration (i.e., single_vi_iter.py)
     :param max_iter: Maximum iterations. By default (i.e., max_iter=None), the algorithm runs until convergence.
     For experimenting with stopping criteria, set the max_iter to a number
     :return Shortest path
