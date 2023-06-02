@@ -4,8 +4,8 @@ Single-objective value iteration: v_n \gets {\arg\min}_{n' \in N_G(n)} c(n,n')+v
 
 import numpy as np
 
-
 def single_value_iter(G, max_iter=1000, threshold=1e-8):
+
     """
     Calculates the value vector for each node
     :param G: Single-objective graph G = (V, E)
