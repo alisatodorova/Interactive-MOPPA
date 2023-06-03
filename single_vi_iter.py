@@ -4,60 +4,52 @@ Single-objective value iteration: v_n \gets {\arg\min}_{n' \in N_G(n)} c(n,n')+v
 
 import numpy as np
 
-def single_value_iter(G, max_iter=1000, threshold=1e-8):
+
+def single_value_iter(G, T, objective, max_iter=1000):
 
     """
     Calculates the value vector for each node
     :param G: Single-objective graph G = (V, E)
-    :param max_iter: Maximum iterations of the method
-    :param gamma: Discount factor, where 1.0 means that future rewards are equally valued to immediate rewards
-    :param threshold: Convergence threshold
+    :param T: Terminating (ending) node
+    :param objective: Objective
+    :param max_iter: Maximum iterations
     :return: Optimal value vector for each node
     """
 
-    # gamma=1.0
-    # num_nodes = len(G)
-    #
-    # v_n = np.zeros(num_nodes) #Initialise each node to 0
-    #
-    # for i in range(max_iter): #or until convergence
-    #     v_n_copy = np.copy(v_n)
-    #
-    #     for n in G:
-    #         if not G[n]: #We've reached the terminal state
-    #             continue
-    #
-    #         max_value = -np.inf
-    #         vals = []
-    #
-    #         for n_next in G[n]:
-    #             cost = G[n][n_next]
-    #             result = np.min(cost + gamma * v_n_copy[n_next])
-    #             max_value = max(max_value, result)
-    #
-    #         v_n[n] = max_value
-    #
-    #     if np.max(np.abs(v_n - v_n_copy)) < threshold: #Check for convergence
-    #         break
-    #
-    # return v_n
+    v_n = {}  # Value vector
+    next_node = {}
 
-    v_n = {}
-    threshold = 1e-8
-    max_iter = 1000
+    for n in G:
+        v_n[n] = np.inf # Initialisation of nodes
+
+        if n == T: # We've reached the terminal state
+            v_n[n] = 0
+
     for i in range(max_iter):  # or until convergence
-        v_n_copy = v_n.copy()
-        for n in G:
-            max_value = -np.inf
-            for n_next in G[n]:
-                for key in G:
-                    cost = key
-                    result = np.min(cost + n_next)
-                    max_value = max(max_value, result)
-                v_n[n] = max_value
+        converged = True
 
-            converged = all(n in v_n_copy and abs(v_n[n] - v_n_copy[n]) < threshold for n in v_n)
-            if converged:
-                break
+        for e in G.edges(data=True):
+            n1, n2 = e[0], e[1]  # The nodes
+
+            # {\arg\min}_{n' \in N_G(n)} c(n,n')+v_{n'}
+            cost = e[2][objective]
+            result1 = min(cost + v_n[n2], v_n[n1])
+            result2 = min(cost + v_n[n1], v_n[n2])
+
+            if v_n[n1] != result1 or v_n[n2] != result2:
+                converged = False
+
+            # Next nodes
+            if v_n[n1] != result1:
+                next_node[n1] = n2
+
+            if v_n[n2] != result2:
+                next_node[n2] = n1
+
+            v_n[n1] = result1
+            v_n[n2] = result2
+
+        if converged: # Check for convergence
+            break
 
     return v_n
