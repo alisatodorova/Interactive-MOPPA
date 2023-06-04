@@ -18,11 +18,12 @@ def single_value_iter(G, T, objective, max_iter=1000):
 
     v_n = {}  # Value vector
     next_node = {}
+    edge_cost = []
 
     for n in G:
-        v_n[n] = np.inf # Initialisation of nodes
+        v_n[n] = np.inf  # Initialisation of nodes
 
-        if n == T: # We've reached the terminal state
+        if n == T:  # We've reached the terminal state
             v_n[n] = 0
 
     for i in range(max_iter):  # or until convergence
@@ -33,6 +34,8 @@ def single_value_iter(G, T, objective, max_iter=1000):
 
             # {\arg\min}_{n' \in N_G(n)} c(n,n')+v_{n'}
             cost = e[2][objective]
+            edge_cost.append(cost)
+
             result1 = min(cost + v_n[n2], v_n[n1])
             result2 = min(cost + v_n[n1], v_n[n2])
 
@@ -49,7 +52,7 @@ def single_value_iter(G, T, objective, max_iter=1000):
             v_n[n1] = result1
             v_n[n2] = result2
 
-        if converged: # Check for convergence
+        if converged:  # Check for convergence
             break
 
-    return v_n
+    return v_n, edge_cost, next_node
