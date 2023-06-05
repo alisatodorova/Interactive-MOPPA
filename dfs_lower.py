@@ -7,7 +7,7 @@ import numpy as np
 import single_vi_iter
 
 
-def dfs_lower(G, S, T, t, U, max_iter=None):
+def dfs_lower(G, S, T, t, U, max_iter=1000):
     """
     Given a target t, the method finds the shortest path from S to T, guided by the lower bounds.
     :param G: Multi-objective search graph G = (V, E)

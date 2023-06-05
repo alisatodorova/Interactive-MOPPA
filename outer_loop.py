@@ -86,7 +86,7 @@ def outer(G, S, T, d):
         C = np.delete(C, np.where(np.all(C == t)))
 
         # Inner-loop approach with DFS guided by the lower-bounds computed from the single-objective value iteration
-        p_s, val_p_s, new_U = dfs_lower.dfs_lower(G, S, T, t, U, max_iter=None)
+        p_s, val_p_s, new_U = dfs_lower.dfs_lower(G, S, T, t, U, max_iter=1000)
         U = new_U
 
         # If v^p_s improves in the target region
