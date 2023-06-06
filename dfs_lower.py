@@ -25,7 +25,7 @@ def dfs_lower(G, S, T, t, U, max_iter=1000):
 
     i = 0  # track iterations of the algorithm
 
-    cost_history = np.array([0, 0])  # Cost of the path we've already seen so far
+    cost_history = np.array([0, 0])  # Cost of the path we've seen so far
 
     stack = [(S, cost_history, [S])]  # (starting node, cost so far, path), where path is from S to current_state
 
@@ -42,7 +42,7 @@ def dfs_lower(G, S, T, t, U, max_iter=1000):
             edge = G[current_node][neighbor]
             edge_list = [v for k, v in edge.items()]  # Stores only the values of the edges' properties
 
-            cost = np.array([edge_list[0]['length'], edge_list[0]['crossing']]) # Cost in both objectives to go from S to neighbor
+            cost = np.array([edge_list[0]['length'], edge_list[0]['crossing']])  # Cost in both objectives to go from S to neighbor
 
             result = current_cost + cost + np.array([lower_length[neighbor], lower_crossing[neighbor]])  # This is the new lower bound
 
