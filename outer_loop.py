@@ -24,7 +24,7 @@ def outer(G, S, T, d):
     :param S: Starting node
     :param T: Terminating (ending) node
     :param d: Objectives
-    :return Recommended path p and its value (cost) v_p
+    :return Target t; Recommended path p and its value (cost) v_p
     """
 
     # Initialise the Gaussian process for 2 objectives
@@ -76,14 +76,18 @@ def outer(G, S, T, d):
     input_domain = np.array(C)  # set of Candidate targets
     acq_fun = acquisition_function.DiscreteAcquirer(input_domain=input_domain, query_type='ranking', seed=123, acquisition_type='expected improvement')
 
-    while C:
+    # while C:
+    while len(C) != 0:
         # Pick the Candidate target which has the highest value from the acquisition function
         expected_improvement = acquisition_function.get_expected_improvement(input_domain, gp, acq_fun.history)
         t_index = np.argmax(expected_improvement)
         t = input_domain[t_index]
 
         # Remove t from C
-        C = np.delete(C, np.where(np.all(C == t)))
+        # C = np.delete(C, np.where(np.all(C == t)))
+        indices = [i for i, x in enumerate(C) if np.all(x == t)]
+        for index in sorted(indices, reverse=True):
+            del C[index]
 
         # Inner-loop approach with DFS guided by the lower-bounds computed from the single-objective value iteration
         p_s, val_p_s, new_U = dfs_lower.dfs_lower(G, S, T, t, U, max_iter=1000)
@@ -113,5 +117,5 @@ def outer(G, S, T, d):
             new_C = [min(val_p_s[0][0], val_p_s[1][0]), min(val_p_s[0][1], val_p_s[1][1])]
             C = np.append(new_C)
 
-    return p_star, val_vector_p_star
+    return t, p_star, val_vector_p_star
 
