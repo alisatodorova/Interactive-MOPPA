@@ -26,10 +26,10 @@ def single_value_iter(G, T, objective, max_iter=None):
         if n == T:  # We've reached the terminal state
             v_n[n] = 0
 
+
     converged = False
     while not converged: #TODO: Is this correct?
     # for i in range(max_iter):  # or until convergence
-        # print(f'Single-Objective Value Iteration number: {i}')
         converged = True
 
         for e in G.edges(data=True):
@@ -55,7 +55,6 @@ def single_value_iter(G, T, objective, max_iter=None):
             v_n[n1] = result1
             v_n[n2] = result2
 
-        # converged = True
         if converged:  # Check for convergence
             break
 
