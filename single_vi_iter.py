@@ -5,7 +5,7 @@ Single-objective value iteration: v_n \gets {\arg\min}_{n' \in N_G(n)} c(n,n')+v
 import numpy as np
 
 
-def single_value_iter(G, T, objective, max_iter=1000):
+def single_value_iter(G, T, objective, max_iter=None):
 
     """
     Calculates the value vector for each node
@@ -26,7 +26,9 @@ def single_value_iter(G, T, objective, max_iter=1000):
         if n == T:  # We've reached the terminal state
             v_n[n] = 0
 
-    for i in range(max_iter):  # or until convergence
+    converged = False
+    while not converged: #TODO: Is this correct?
+    # for i in range(max_iter):  # or until convergence
         # print(f'Single-Objective Value Iteration number: {i}')
         converged = True
 
@@ -53,6 +55,7 @@ def single_value_iter(G, T, objective, max_iter=1000):
             v_n[n1] = result1
             v_n[n2] = result2
 
+        # converged = True
         if converged:  # Check for convergence
             break
 

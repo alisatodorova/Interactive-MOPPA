@@ -80,3 +80,11 @@ idna==3.4
 pyparsing==3.0.9
 entrypoints==0.4
 jupyter_console==6.6.3
+
+shapely==2.0.1
+zlib==1.2.13
+openssl==1.1.1t
+gettext==0.21.0
+blas==1.0
+python==3.10.11
+readline==8.2

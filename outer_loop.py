@@ -10,6 +10,7 @@ https://github.com/lmzintgraf/gp_pref_elicit
 
 import numpy as np
 import networkx as nx
+import time
 
 import dfs_lower
 
@@ -26,6 +27,8 @@ def outer(G, S, T, d):
     :param d: Objectives
     :return Target t; Recommended path p and its value (cost) v_p
     """
+
+    start = time.time()
 
     # Initialise the Gaussian process for 2 objectives
     gp = gaussian_process.GPPairwise(num_objectives=2, std_noise=0.01, kernel_width=0.15, prior_mean_type='zero', seed=None)
@@ -84,13 +87,12 @@ def outer(G, S, T, d):
         t = input_domain[t_index]
 
         # Remove t from C
-        # C = np.delete(C, np.where(np.all(C == t)))
         indices = [i for i, x in enumerate(C) if np.all(x == t)]
         for index in sorted(indices, reverse=True):
             del C[index]
 
         # Inner-loop approach with DFS guided by the lower-bounds computed from the single-objective value iteration
-        p_s, val_p_s, new_U = dfs_lower.dfs_lower(G, S, T, t, U, max_iter=1000)
+        p_s, val_p_s, new_U = dfs_lower.dfs_lower(G, S, T, t, U) # Change max_iter when doing experiments
         U = new_U
 
         # If v^p_s improves in the target region
@@ -116,6 +118,10 @@ def outer(G, S, T, d):
             # Compute new candidate targets based on v^{p^s} and add to C
             new_C = [min(val_p_s[0][0], val_p_s[1][0]), min(val_p_s[0][1], val_p_s[1][1])]
             C = np.append(new_C)
+
+    end = time.time()
+    elapsed_seconds = (end - start)
+    print("Outer-loop time elapsed in seconds: " + str(elapsed_seconds))
 
     return t, p_star, val_vector_p_star, P
 
