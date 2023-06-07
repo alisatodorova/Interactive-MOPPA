@@ -49,15 +49,11 @@ class Experiment:
 
     def run(self, recalculate=False):
 
-        #TODO: The commented part below is not working. Saving the results in a folder is giving me a
-        # ValueError:setting an array element with a sequence.
-        # The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (7,) + inhomogeneous part.
-
         # get the path where we store the results and return this if they exist and we don't want to recalculate
-        # path_result_file = os.path.join(PATH_RESULTS_DIR, utils_parameters.get_filename(self.params) + '.npy')
-        # if (not recalculate) and os.path.exists(path_result_file):
-        #     print('loading...', path_result_file)
-        #     return np.load(path_result_file)
+        path_result_file = os.path.join(PATH_RESULTS_DIR, utils_parameters.get_filename(self.params) + '.npy')
+        if (not recalculate) and os.path.exists(path_result_file):
+            print('loading...', path_result_file)
+            return np.load(path_result_file)
 
         # keep track of the maximum utility found
         max_utility_per_query = np.empty(self.params['num queries'])
@@ -98,8 +94,7 @@ class Experiment:
 
         results = self.gather_results(max_utility_per_query)
 
-        #TODO: not working for me:
-        # np.save(path_result_file, results)
+        np.save(path_result_file, results)
 
         return results
 

@@ -27,7 +27,7 @@ def single_value_iter(G, T, objective, max_iter=1000):
             v_n[n] = 0
 
     for i in range(max_iter):  # or until convergence
-        print(f'Single-Objective Value Iteration number: {i}')
+        # print(f'Single-Objective Value Iteration number: {i}')
         converged = True
 
         for e in G.edges(data=True):
