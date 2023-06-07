@@ -1,11 +1,11 @@
-'''
+"""
 Single-objective value iteration: v_n \gets {\arg\min}_{n' \in N_G(n)} c(n,n')+v_{n'}
-'''
+"""
 
 import numpy as np
 
 
-def single_value_iter(G, T, objective, max_iter=1000): #TODO: max_iter=None or a number?
+def single_value_iter(G, T, objective, max_iter=1000):
 
     """
     Calculates the value vector for each node
@@ -27,6 +27,7 @@ def single_value_iter(G, T, objective, max_iter=1000): #TODO: max_iter=None or a
             v_n[n] = 0
 
     for i in range(max_iter):  # or until convergence
+        print(f'Single-Objective Value Iteration number: {i}')
         converged = True
 
         for e in G.edges(data=True):

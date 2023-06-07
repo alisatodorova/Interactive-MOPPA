@@ -1,7 +1,7 @@
-'''
+"""
 Depth-first search (DFS) algorithm, guided by the lower bounds,
 obtained from the Single-objective value iteration (i.e., single_vi_iter.py)
-'''
+"""
 
 import numpy as np
 import single_vi_iter
@@ -30,6 +30,7 @@ def dfs_lower(G, S, T, t, U, max_iter=1000):
     stack = [(S, cost_history, [S])]  # (starting node, cost so far, path), where path is from S to current_state
 
     while stack:
+        print(f'DFS number: {i}')
         current_node, current_cost, path = stack.pop()  # current_cost is the total cost up to the current_node
 
         if current_node == T:

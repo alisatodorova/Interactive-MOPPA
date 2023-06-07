@@ -1,4 +1,4 @@
-'''
+"""
 Outer-loop: Selecting the target direction
 
 Note: The Gaussian process and Acquisition function are used as blackboxes from
@@ -6,7 +6,7 @@ Note: The Gaussian process and Acquisition function are used as blackboxes from
 by Luisa M. Zintgraf, Diederik M. Roijers, Sjoerd Linders, Catholijn M. Jonker, and Ann Nowé,
 which was published at AAMAS (Autonomous Agents and Multi-Agent Systems), Stockholm 2018.
 https://github.com/lmzintgraf/gp_pref_elicit
-'''
+"""
 
 import numpy as np
 import networkx as nx
@@ -94,7 +94,7 @@ def outer(G, S, T, d):
         U = new_U
 
         # If v^p_s improves in the target region
-        if np.any(np.greater(val_p_s, U)):
+        if np.any(np.less(val_p_s, U)):
             P = P.append(p_s)
 
             # Compare p^s to p^∗ and add comparison to the GP ▷ User ranking, i.e., is the new path preferred to the current, maximum one?
@@ -117,5 +117,5 @@ def outer(G, S, T, d):
             new_C = [min(val_p_s[0][0], val_p_s[1][0]), min(val_p_s[0][1], val_p_s[1][1])]
             C = np.append(new_C)
 
-    return t, p_star, val_vector_p_star
+    return t, p_star, val_vector_p_star, P
 
