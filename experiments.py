@@ -48,12 +48,16 @@ edges = G.edges
 # T = (121015.06629881046, 485829.2834579833) #very last
 
 #Full map
-#ex8
-S = (119998.5393221767, 485722.64175419795) #very first
-T = (121544.5105401219, 486594.5264401745) #very last
+#ex11
+# S = (119998.5393221767, 485722.64175419795) #very first
+# T = (121544.5105401219, 486594.5264401745) #very last
+
+#ex12 #picked from last node to first node
+S = (121579.44012780159, 486570.1780368565)
+T = (120174.11908660393, 485953.25834557955)
 
 t, p_star, val_vector_p_star, P = outer_loop.outer(G, S, T, objectives)
-# print(f"Target {t}; Path {p_star} with cost {val_vector_p_star}")
+print(f"Target {t}; Path {p_star} with cost {val_vector_p_star}")
 for i, path in enumerate(P):
     print(f"Path {i+1}:", path)
 
@@ -109,6 +113,6 @@ ax.legend(all_handles, all_labels)
 
 # Save the image
 folder_path = 'experiments'
-file_name = 'ex11.png'
+file_name = 'ex13.png'
 file_path = folder_path + '/' + file_name
 plt.savefig(file_path)

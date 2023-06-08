@@ -45,15 +45,15 @@ def single_value_iter(G, T, objective, max_iter=None):
             if v_n[n1] != result1 or v_n[n2] != result2:
                 converged = False
 
-            # Next nodes
-            if v_n[n1] != result1:
-                next_node[n1] = n2
+                # Next nodes
+                if v_n[n1] != result1:
+                    next_node[n1] = n2
 
-            if v_n[n2] != result2:
-                next_node[n2] = n1
+                if v_n[n2] != result2:
+                    next_node[n2] = n1
 
-            v_n[n1] = result1
-            v_n[n2] = result2
+                v_n[n1] = result1
+                v_n[n2] = result2
 
         if converged:  # Check for convergence
             break
