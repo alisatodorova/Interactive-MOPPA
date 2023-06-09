@@ -12,7 +12,7 @@ legend_text = []  # Legend
 cmap = matplotlib.colormaps['tab10']  # Colormap
 fig, ax = plt.subplots(figsize=(14, 14), dpi=600)
 
-map = gpd.read_file("Sidewalk_width_crossings.geojson")
+map = gpd.read_file("Sidewalk_width_crossings_smaller.geojson")
 
 # Objectives
 objective1 = map['length']
@@ -28,8 +28,9 @@ edges = G.edges
 
 #Smaller map:
 #ex1:
-# S = (122245.37633330293, 486126.8581684635) #very first node
+S = (122245.37633330293, 486126.8581684635) #very first node
 # T = (122246.77932030056, 486223.5791244763) #t = cost
+T = (122253.09793657108, 486219.18429932056)
 
 #ex2:
 # S = (122245.37633330293, 486126.8581684635) #very first node
@@ -53,8 +54,8 @@ edges = G.edges
 # T = (121544.5105401219, 486594.5264401745) #very last
 
 #ex12 #picked from last node to first node
-S = (121579.44012780159, 486570.1780368565)
-T = (120174.11908660393, 485953.25834557955)
+# S = (121579.44012780159, 486570.1780368565)
+# T = (120174.11908660393, 485953.25834557955)
 
 t, p_star, val_vector_p_star, P = outer_loop.outer(G, S, T, objectives)
 print(f"Target {t}; Path {p_star} with cost {val_vector_p_star}")
@@ -113,6 +114,6 @@ ax.legend(all_handles, all_labels)
 
 # Save the image
 folder_path = 'experiments'
-file_name = 'ex13.png'
+file_name = 'ex14.png'
 file_path = folder_path + '/' + file_name
 plt.savefig(file_path)

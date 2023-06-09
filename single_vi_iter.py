@@ -28,7 +28,7 @@ def single_value_iter(G, T, objective, max_iter=None):
 
 
     converged = False
-    while not converged: #TODO: Is this correct?
+    while not converged:
     # for i in range(max_iter):  # or until convergence
         converged = True
 
