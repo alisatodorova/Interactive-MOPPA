@@ -5,14 +5,13 @@ Single-objective value iteration: v_n \gets {\arg\min}_{n' \in N_G(n)} c(n,n')+v
 import numpy as np
 
 
-def single_value_iter(G, T, objective, max_iter=None):
+def single_value_iter(G, T, objective):
 
     """
     Calculates the value vector for each node
     :param G: Single-objective graph G = (V, E)
     :param T: Terminating (ending) node
     :param objective: Objective
-    :param max_iter: Maximum iterations
     :return: Optimal value vector for each node
     """
 
@@ -29,7 +28,6 @@ def single_value_iter(G, T, objective, max_iter=None):
 
     converged = False
     while not converged:
-    # for i in range(max_iter):  # or until convergence
         converged = True
 
         for e in G.edges(data=True):
