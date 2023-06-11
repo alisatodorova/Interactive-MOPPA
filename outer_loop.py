@@ -1,5 +1,5 @@
 """
-Outer-loop: Selecting the target direction
+Outer-loop: Selecting the target region
 
 Note: The Gaussian process and Acquisition function are used as blackboxes from
 "Ordered Preference Elicitation Strategies for Supporting Multi-Objective Decision Making"
@@ -36,7 +36,7 @@ def outer(G, S, T, d):
     P = []  # Pareto set
     val_p = []  # value vectors w.r.t. p, i.e., v^{p_1}, v^{p_2}
     val_vector_p_star = []  # value vectors w.r.t. p^*
-    compare_ps_pstar = []
+    val_p_t = [] # value vectors w.r.t. p^t from DFS
 
     # Path initialisation
     for i in d:
@@ -50,7 +50,7 @@ def outer(G, S, T, d):
 
     # Candidate Targets, i.e., the most optimistic points
     C = [min(val_p[0][0], val_p[1][0]), min(val_p[0][1], val_p[1][1])]
-    C = [np.array(C)]
+    C_array = [np.array(C)]
 
     # The most pessimistic points form the upper bounds
     U = [max(val_p[0][0], val_p[1][0]), max(val_p[0][1], val_p[1][1])]
@@ -59,6 +59,7 @@ def outer(G, S, T, d):
     user_preference = utils_user.UserPreference(num_objectives=2, std_noise=0.1)
     add_noise = True
     ground_utility = user_preference.get_preference(val_p, add_noise=add_noise)  # This is the ground-truth utility, i.e., the true utility
+    print(f"Ground-truth utility for paths in P: {np.max(ground_utility)}") #TODO: Check if it's correct
 
     # Add the comparisons to the GP
     comparisons = dataset.DatasetPairwise(num_objectives=2)
@@ -76,48 +77,56 @@ def outer(G, S, T, d):
     val_vector_p_star.append(np.array([val_p_star1, val_p_star2]))
 
     # Initialise the acquisition function
-    input_domain = np.array(C)  # set of Candidate targets
+    input_domain = np.array(C_array)  # set of Candidate targets
     acq_fun = acquisition_function.DiscreteAcquirer(input_domain=input_domain, query_type='ranking', seed=123, acquisition_type='expected improvement')
 
     # while C:
-    while len(C) != 0:
+    while len(C_array) != 0:
         # Pick the Candidate target which has the highest value from the acquisition function
         expected_improvement = acquisition_function.get_expected_improvement(input_domain, gp, acq_fun.history)
         t_index = np.argmax(expected_improvement)
         t = input_domain[t_index]
 
         # Remove t from C
-        indices = [i for i, x in enumerate(C) if np.all(x == t)]
+        indices = [i for i, x in enumerate(C_array) if np.all(x == t)]
         for index in sorted(indices, reverse=True):
-            del C[index]
+            del C_array[index]
 
         # Inner-loop approach with DFS guided by the lower-bounds computed from the single-objective value iteration
-        p_s, val_p_s, new_U = dfs_lower.dfs_lower(G, S, T, t, U) # Change max_iter when doing experiments
-        U = new_U
+        p_t, val, new_U = dfs_lower.dfs_lower(G, S, T, t, U, max_iter=None)  # Change max_iter when doing experiments
 
-        # If v^p_s improves in the target region
-        if np.any(np.less(val_p_s, U)):
-            P = P.append(p_s)
+        # U = new_U #TODO: Check how to update
+        val_p_t.append(val)
+        U = [np.array(U)]
 
-            # Compare p^s to p^∗ and add comparison to the GP ▷ User ranking, i.e., is the new path preferred to the current, maximum one?
-            compare_ps_pstar.append(np.array([val_p_s, val_vector_p_star]))
-            ranking_new_paths = user_preference.get_preference(compare_ps_pstar, add_noise=add_noise)
+        # If v^p_t improves in the target region
+        if np.any(np.less(val_p_t, U)):
+            P.append(p_t)
+
+            # Compare p^t to p^∗ and add comparison to the GP ▷ User ranking, i.e., is the new path preferred to the current, maximum one?
+            val_p_t = [np.array(val)]
+            compare_pt_pstar = val_p_t.copy()
+            compare_pt_pstar.extend(val_vector_p_star)
+            ranking_new_paths = user_preference.get_preference(compare_pt_pstar, add_noise=add_noise)
+            print(f"Utility for p*: {np.max(ranking_new_paths)}")
 
             # Add the comparisons to the GP
-            comparisons.add_single_comparison(compare_ps_pstar[np.argmax(ranking_new_paths)], compare_ps_pstar[np.argmin(ranking_new_paths)])
+            comparisons.add_single_comparison(compare_pt_pstar[np.argmax(ranking_new_paths)], compare_pt_pstar[np.argmin(ranking_new_paths)])
             gp.update(comparisons)
 
-            # if u(v^{p^s}) > u(v^{p^*}) then
-            u_v_p_s, _ = gp.get_predictive_params(val_p_s, True)  # The maximum a posteriori (MAP) estimate is the mean from gaussian_process.get_predictive_params()
+            # if u(v^{p^t}) > u(v^{p^*}) then
+            u_v_p_t, _ = gp.get_predictive_params(val_p_t, True)  # The maximum a posteriori (MAP) estimate is the mean from gaussian_process.get_predictive_params()
             u_v_p_star, _ = gp.get_predictive_params(val_vector_p_star, True)
 
-            if u_v_p_s > u_v_p_star:
-                # p^∗ ← p^s
-                p_star = p_s
+            if u_v_p_t > u_v_p_star:
+                # p^∗ ← p^t
+                p_star = p_t
 
-            # Compute new candidate targets based on v^{p^s} and add to C
-            new_C = [min(val_p_s[0][0], val_p_s[1][0]), min(val_p_s[0][1], val_p_s[1][1])]
-            C = np.append(new_C)
+            # Compute new candidate targets based on v^{p^t} and add to C #TODO:Check if it's correct
+            new_C1 = [min(val_p_t[0][0], val_p[0][0]), min(val_p_t[0][1], val_p[0][1])]
+            C.append(new_C1)
+            new_C2 = [min(val_p_t[0][0], val_p[1][0]), min(val_p_t[0][1], val_p[1][1])]
+            C.append(new_C2)
 
     end = time.time()
     elapsed_seconds = (end - start)
