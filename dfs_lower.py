@@ -31,18 +31,20 @@ def dfs_lower(G, S, T, t, U, max_iter=None):
 
     stack = [(S, cost_history, [S])]  # (starting node, cost so far, path), where path is from S to current_state
 
+    current_best_path = []
+
     while stack:
+        # print(len(stack))
         current_node, current_cost, path = stack.pop()  # current_cost is the total cost up to the current_node
 
         if current_node == T:
-           #TODO: # U = current_cost  # Update the upper bound as full exact path to T is an upper bound with value=current_cost
+            print(f"current cost: {current_cost} and current U: {U}")
+            if np.all(np.less_equal(current_cost, U)):
+                U = current_cost  # Update the upper bound as full exact path to T is an upper bound with value=current_cost
+                print(f"updated U: {U}")
+                current_best_path = path.copy()
 
-            print(f'DFS iterations: {i}')
-            end = time.time()
-            elapsed_seconds = (end - start)
-            print("DFS time elapsed in seconds: " + str(elapsed_seconds))
-
-            return path, current_cost, U
+            continue
 
         neighbor_list = []  # List of all neighbor nodes
 
@@ -74,5 +76,9 @@ def dfs_lower(G, S, T, t, U, max_iter=None):
             print("The algorithm has reached the given maximum iterations, but has found no solution.")
             break
 
-    print("The algorithm has terminated, but no solution was found.")
-    # return None
+    print(f'DFS iterations: {i}')
+    end = time.time()
+    elapsed_seconds = (end - start)
+    print("DFS time elapsed in seconds: " + str(elapsed_seconds))
+
+    return current_best_path, U

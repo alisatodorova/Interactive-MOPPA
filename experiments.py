@@ -24,7 +24,7 @@ map_amsterdam = gpd.read_file("Sidewalk_width_crossings.geojson")
 # Objectives
 objective1 = map_amsterdam['length']
 objective2 = map_amsterdam['crossing']
-objective3 = map_amsterdam['obstacle_free_width']
+# objective3 = map_amsterdam['>2.9m']
 objectives = ('length', 'crossing')
 
 # Create a NetworkX graph from the map

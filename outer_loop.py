@@ -31,7 +31,7 @@ def outer(G, S, T, d):
     start = time.time()
 
     # Initialise the Gaussian process for 2 objectives
-    gp = gaussian_process.GPPairwise(num_objectives=2, std_noise=0.01, kernel_width=0.15, prior_mean_type='zero', seed=None)
+    gp = gaussian_process.GPPairwise(num_objectives=2, std_noise=0.01, kernel_width=0.15, prior_mean_type='zero', seed=123)
 
     P = []  # Pareto set
     val_p = []  # value vectors w.r.t. p, i.e., v^{p_1}, v^{p_2}
@@ -56,7 +56,7 @@ def outer(G, S, T, d):
     U = [max(val_p[0][0], val_p[1][0]), max(val_p[0][1], val_p[1][1])]
 
     # User ranking: Compare paths in P
-    user_preference = utils_user.UserPreference(num_objectives=2, std_noise=0.1)
+    user_preference = utils_user.UserPreference(num_objectives=2, std_noise=0.1, seed=123) #seed=123
     add_noise = True
     ground_utility = user_preference.get_preference(val_p, add_noise=add_noise)  # This is the ground-truth utility, i.e., the true utility
     print(f"Ground-truth utility for paths in P: {np.max(ground_utility)}") #TODO: Check if it's correct
@@ -93,18 +93,18 @@ def outer(G, S, T, d):
             del C_array[index]
 
         # Inner-loop approach with DFS guided by the lower-bounds computed from the single-objective value iteration
-        p_t, val, new_U = dfs_lower.dfs_lower(G, S, T, t, U, max_iter=None)  # Change max_iter when doing experiments
+        p_t, new_U = dfs_lower.dfs_lower(G, S, T, t, U, max_iter=None)  # Change max_iter when doing experiments
 
         # U = new_U #TODO: Check how to update
-        val_p_t.append(val)
-        U = [np.array(U)]
+        val_p_t.append(new_U)
+        U = [np.array(new_U)]
 
         # If v^p_t improves in the target region
         if np.any(np.less(val_p_t, U)):
             P.append(p_t)
 
             # Compare p^t to p^∗ and add comparison to the GP ▷ User ranking, i.e., is the new path preferred to the current, maximum one?
-            val_p_t = [np.array(val)]
+            val_p_t = [np.array(new_U)]
             compare_pt_pstar = val_p_t.copy()
             compare_pt_pstar.extend(val_vector_p_star)
             ranking_new_paths = user_preference.get_preference(compare_pt_pstar, add_noise=add_noise)
