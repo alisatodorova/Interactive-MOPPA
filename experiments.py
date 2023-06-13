@@ -19,7 +19,7 @@ new_cmap = colors.ListedColormap(new_cmap)
 fig, ax = plt.subplots(figsize=(14, 14), dpi=600)
 
 # Map
-map_amsterdam = gpd.read_file("Sidewalk_width_crossings.geojson")
+map_amsterdam = gpd.read_file("Sidewalk_width_crossings_smaller.geojson")
 
 # Objectives
 objective1 = map_amsterdam['length']
@@ -33,9 +33,9 @@ G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
 
 #Smaller map: ~800 nodes
 #ex1:
-# S = (122245.37633330293, 486126.8581684635) #very first node
+S = (122245.37633330293, 486126.8581684635) #very first node
+T = (122253.09793657108, 486219.18429932056)
 # T = (122246.77932030056, 486223.5791244763) #t = cost
-# T = (122253.09793657108, 486219.18429932056)
 
 #ex2:
 # S = (122245.37633330293, 486126.8581684635) #very first node
@@ -55,8 +55,8 @@ G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
 
 #Full map ~11401 nodes and radius 800m
 #ex1
-S = (119998.5393221767, 485722.64175419795) #very first
-T = (121544.5105401219, 486594.5264401745) #very last
+# S = (119998.5393221767, 485722.64175419795) #very first
+# T = (121544.5105401219, 486594.5264401745) #very last
 
 #ex2 ~0.5km distance
 # S = (120107.50109162027, 485143.8697083206)
