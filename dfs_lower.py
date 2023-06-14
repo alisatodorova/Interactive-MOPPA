@@ -23,7 +23,7 @@ def dfs_lower(G, S, T, t, U, max_iter=None):
     start = time.time()
 
     lower_length = single_vi_iter.single_value_iter(G, T, 'length')
-    lower_crossing = single_vi_iter.single_value_iter(G, T, 'crossing')
+    lower_crossing = single_vi_iter.single_value_iter(G, T, '>2.9m')
 
     i = 0  # track iterations of the algorithm
 
@@ -34,14 +34,11 @@ def dfs_lower(G, S, T, t, U, max_iter=None):
     current_best_path = []
 
     while stack:
-        # print(len(stack))
         current_node, current_cost, path = stack.pop()  # current_cost is the total cost up to the current_node
 
         if current_node == T:
-            print(f"current cost: {current_cost} and current U: {U}")
             if np.all(np.less_equal(current_cost, U)):
                 U = current_cost  # Update the upper bound as full exact path to T is an upper bound with value=current_cost
-                print(f"updated U: {U}")
                 current_best_path = path.copy()
 
             continue
@@ -52,7 +49,7 @@ def dfs_lower(G, S, T, t, U, max_iter=None):
             edge = G[current_node][neighbor]
             edge_list = [v for k, v in edge.items()]  # Stores only the values of the edges' properties
 
-            cost = np.array([edge_list[0]['length'], edge_list[0]['crossing']])  # Cost in both objectives to go from S to neighbor
+            cost = np.array([edge_list[0]['length'], edge_list[0]['>2.9m']])  # Cost in both objectives to go from S to neighbor
 
             result = current_cost + cost + np.array([lower_length[neighbor], lower_crossing[neighbor]])  # This is the new lower bound
 

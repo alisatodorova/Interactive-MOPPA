@@ -7,6 +7,48 @@ import matplotlib.pyplot as plt
 import matplotlib
 import outer_loop
 
+
+# Create a 5x5 grid graph
+G = nx.Graph()
+
+# Add nodes to the graph
+for i in range(5):
+    for j in range(5):
+        G.add_node((i, j))
+
+# Add edges to form the grid structure
+for i in range(4):
+    for j in range(5):
+        G.add_edge((i, j), (i + 1, j))
+        G.add_edge((i, j), (i, j + 1))
+
+# Assign costs for length and number of crossings
+length_costs = [
+    [1, 2, 3, 4, 5],
+    [2, 3, 4, 5, 6],
+    [3, 4, 5, 6, 7],
+    [4, 5, 6, 7, 8],
+    [5, 6, 7, 8, 9]
+]
+
+crossing_costs = [
+    [1, 1, 1, 1, 1],
+    [1, 2, 2, 2, 1],
+    [1, 2, 3, 2, 1],
+    [1, 2, 2, 2, 1],
+    [1, 1, 1, 1, 1]
+]
+
+# Assign the costs for each edge
+for u, v in G.edges():
+    u_x, u_y = u
+    v_x, v_y = v
+    length_cost = length_costs[u_x][u_y]
+    crossings_cost = crossing_costs[u_x][u_y]
+    G[u][v]['length'] = length_cost
+    G[u][v]['crossing'] = crossing_costs
+print(G.edges(data=True))
+
 # Legend
 legend_text = []
 legend_labels = []
@@ -18,58 +60,12 @@ new_cmap = colors.ListedColormap(new_cmap)
 # Plot
 fig, ax = plt.subplots(figsize=(14, 14), dpi=600)
 
-# Map
-map_amsterdam = gpd.read_file("Sidewalk_width_crossings.geojson")
 
-# Objectives
-# objectives = ('length', 'crossing')
-# objectives = ('length', '0.9-1.8m')
-# objectives = ('length', '1.8-2.9m')
-# objectives = ('length', '<0.9m')
-objectives = ('length', '>2.9m')
+objectives = ('length', 'crossing')
 
-# Create a NetworkX graph from the map
-G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
+S = (0, 0)
+T = (3, 5)
 
-
-#Smaller map: ~800 nodes
-#ex1:
-# S = (122245.37633330293, 486126.8581684635) #very first node
-# T = (122253.09793657108, 486219.18429932056)
-# T = (122246.77932030056, 486223.5791244763) #t = cost
-
-#ex2:
-# S = (122245.37633330293, 486126.8581684635) #very first node
-# T = (122320.31466476223, 486327.5294561802)
-
-# S = (122245.37633330293, 486126.8581684635)
-# T = (122384.20250442973, 486270.65737816785) #AxisError
-
-#Small map: radius 250m and 1000 nodes
-# ex6
-# S = (120549.11715177551, 486040.41438763676) #not very first node
-# T = (120939.06590611176, 485820.4983572203)
-
-#ex7
-# S = (120548.6120283842, 486088.19577846595) #vey first
-# T = (121015.06629881046, 485829.2834579833) #very last
-
-#Full map ~11401 nodes and radius 800m
-#ex1
-# S = (119998.5393221767, 485722.64175419795) #very first
-# T = (121544.5105401219, 486594.5264401745) #very last
-
-#ex2 ~0.5km distance
-# S = (120107.50109162027, 485143.8697083206)
-# T = (120016.87004460393, 485271.50645493163)
-
-#ex3 ~ 1.4km distance
-# S = (120522.88677087355, 485884.8214429696)
-# T = (120773.95779829, 485200.20212105685)
-
-#ex
-S = (120722.03948820339, 485331.8028751559)
-T = (121552.83295955718, 485778.4098562119)
 
 # Distance between S and T
 for i in objectives:
@@ -138,6 +134,6 @@ ax.legend(handles=all_handles, labels=all_labels, loc='upper left')
 
 # Save the image
 folder_path = 'experiments'
-file_name = 'ex70.png'
+file_name = 'ex17.png'
 file_path = folder_path + '/' + file_name
 plt.savefig(file_path, bbox_inches='tight')
