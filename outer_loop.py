@@ -45,7 +45,7 @@ def outer(G, S, T, d):
 
         # Computes the total cost associated with the path and objective, i.e., the value of the path
         val_obj1 = nx.path_weight(G, path=p, weight='length')
-        val_obj2 = nx.path_weight(G, path=p, weight='>2.9m')
+        val_obj2 = nx.path_weight(G, path=p, weight='crossing')  # Change objectives as needed
         val_p.append(np.array([val_obj1, val_obj2]))
 
     # Candidate Targets, i.e., the most optimistic points
@@ -73,7 +73,7 @@ def outer(G, S, T, d):
 
     # Computes the total cost associated with the path and objective, i.e., the value of the path
     val_p_star1 = nx.path_weight(G, path=p_star, weight='length')
-    val_p_star2 = nx.path_weight(G, path=p_star, weight='>2.9m')
+    val_p_star2 = nx.path_weight(G, path=p_star, weight='crossing')  # Change objectives as needed
     val_vector_p_star.append(np.array([val_p_star1, val_p_star2]))
 
     # Initialise the acquisition function

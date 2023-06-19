@@ -19,14 +19,14 @@ new_cmap = colors.ListedColormap(new_cmap)
 fig, ax = plt.subplots(figsize=(14, 14), dpi=600)
 
 # Map
-map_amsterdam = gpd.read_file("Sidewalk_width_crossings.geojson")
+map_amsterdam = gpd.read_file("Sidewalk_width_crossings_smaller.geojson")
 
 # Objectives
-# objectives = ('length', 'crossing')
+objectives = ('length', 'crossing')
 # objectives = ('length', '0.9-1.8m')
 # objectives = ('length', '1.8-2.9m')
 # objectives = ('length', '<0.9m')
-objectives = ('length', '>2.9m')
+# objectives = ('length', '>2.9m')
 
 # Create a NetworkX graph from the map
 G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
@@ -34,13 +34,12 @@ G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
 
 #Smaller map: ~800 nodes
 #ex1:
-# S = (122245.37633330293, 486126.8581684635) #very first node
-# T = (122253.09793657108, 486219.18429932056)
-# T = (122246.77932030056, 486223.5791244763) #t = cost
+S = (122245.37633330293, 486126.8581684635) #very first node
+T = (122320.31466476223, 486327.5294561802)
 
 #ex2:
 # S = (122245.37633330293, 486126.8581684635) #very first node
-# T = (122320.31466476223, 486327.5294561802)
+# T = (122320.31466476223, 486327.5294561802) #very last node
 
 # S = (122245.37633330293, 486126.8581684635)
 # T = (122384.20250442973, 486270.65737816785) #AxisError
@@ -67,9 +66,19 @@ G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
 # S = (120522.88677087355, 485884.8214429696)
 # T = (120773.95779829, 485200.20212105685)
 
+# #ex
+# S = (120722.03948820339, 485331.8028751559)
+# T = (121552.83295955718, 485778.4098562119)
+
 #ex
-S = (120722.03948820339, 485331.8028751559)
-T = (121552.83295955718, 485778.4098562119)
+# S = (121230.02895176529, 485470.03881079936)
+# T = (121128.56143258157, 485478.90656836913)
+# S = (121173.2397207758, 485502.6246644313)
+# T = (121147.78161871164, 485427.8479137057) #use this
+# T = (121167.58299078527, 485558.52833030646) #use this
+# S = (121301.20803747902, 485508.92503021995)
+# T = (121174.2829937735, 485512.55548926245)
+
 
 # Distance between S and T
 for i in objectives:
