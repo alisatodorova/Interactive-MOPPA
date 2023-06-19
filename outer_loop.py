@@ -45,7 +45,7 @@ def outer(G, S, T, d):
 
         # Computes the total cost associated with the path and objective, i.e., the value of the path
         val_obj1 = nx.path_weight(G, path=p, weight='length')
-        val_obj2 = nx.path_weight(G, path=p, weight='>2.9m')
+        val_obj2 = nx.path_weight(G, path=p, weight='crossing')
         val_p.append(np.array([val_obj1, val_obj2]))
 
     # Candidate Targets, i.e., the most optimistic points
@@ -57,7 +57,7 @@ def outer(G, S, T, d):
 
     # User ranking: Compare paths in P
     user_preference = utils_user.UserPreference(num_objectives=2, std_noise=0.1, seed=123) #seed=123
-    add_noise = True
+    add_noise = True #TODO: False
     ground_utility = user_preference.get_preference(val_p, add_noise=add_noise)  # This is the ground-truth utility, i.e., the true utility
     print(f"Ground-truth utility for paths in P: {np.max(ground_utility)}")
 
@@ -73,7 +73,7 @@ def outer(G, S, T, d):
 
     # Computes the total cost associated with the path and objective, i.e., the value of the path
     val_p_star1 = nx.path_weight(G, path=p_star, weight='length')
-    val_p_star2 = nx.path_weight(G, path=p_star, weight='>2.9m')
+    val_p_star2 = nx.path_weight(G, path=p_star, weight='crossing')
     val_vector_p_star.append(np.array([val_p_star1, val_p_star2]))
 
     # Initialise the acquisition function

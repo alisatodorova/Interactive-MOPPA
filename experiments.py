@@ -19,14 +19,14 @@ new_cmap = colors.ListedColormap(new_cmap)
 fig, ax = plt.subplots(figsize=(14, 14), dpi=600)
 
 # Map
-map_amsterdam = gpd.read_file("Sidewalk_width_crossings.geojson")
+map_amsterdam = gpd.read_file("Sidewalk_width_crossings_smaller.geojson")
 
 # Objectives
-# objectives = ('length', 'crossing')
+objectives = ('length', 'crossing')
 # objectives = ('length', '0.9-1.8m')
 # objectives = ('length', '1.8-2.9m')
 # objectives = ('length', '<0.9m')
-objectives = ('length', '>2.9m')
+# objectives = ('length', '>2.9m')
 
 # Create a NetworkX graph from the map
 G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
@@ -34,9 +34,8 @@ G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
 
 #Smaller map: ~800 nodes
 #ex1:
-# S = (122245.37633330293, 486126.8581684635) #very first node
-# T = (122253.09793657108, 486219.18429932056)
-# T = (122246.77932030056, 486223.5791244763) #t = cost
+S = (122245.37633330293, 486126.8581684635) #very first node
+T = (122320.31466476223, 486327.5294561802)
 
 #ex2:
 # S = (122245.37633330293, 486126.8581684635) #very first node
@@ -68,8 +67,8 @@ G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
 # T = (120773.95779829, 485200.20212105685)
 
 #ex
-S = (120722.03948820339, 485331.8028751559)
-T = (121552.83295955718, 485778.4098562119)
+# S = (120722.03948820339, 485331.8028751559)
+# T = (121552.83295955718, 485778.4098562119)
 
 # Distance between S and T
 for i in objectives:
