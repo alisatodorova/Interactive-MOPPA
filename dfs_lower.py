@@ -49,7 +49,7 @@ def dfs_lower(G, S, T, t, U, max_iter=None):
             edge = G[current_node][neighbor]
             edge_list = [v for k, v in edge.items()]  # Stores only the values of the edges' properties
 
-            # cost = np.array([edge['length'], edge['crossing']]) #For dummy graph
+            # cost = np.array([edge['length'], edge['crossing']]) # Use for dummy graph
             cost = np.array([edge_list[0]['length'], edge_list[0]['crossing']])  # Cost in both objectives to go from S to neighbor
 
             result = current_cost + cost + np.array([lower_length[neighbor], lower_crossing[neighbor]])  # This is the new lower bound
