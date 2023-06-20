@@ -56,8 +56,8 @@ def outer(G, S, T, d):
     U = [max(val_p[0][0], val_p[1][0]), max(val_p[0][1], val_p[1][1])]
 
     # User ranking: Compare paths in P
-    user_preference = utils_user.UserPreference(num_objectives=2, std_noise=0.1, seed=123) #seed=123
-    add_noise = True #TODO: False
+    user_preference = utils_user.UserPreference(num_objectives=2, std_noise=0.1, seed=123)  # seed=123
+    add_noise = True
     ground_utility = user_preference.get_preference(val_p, add_noise=add_noise)  # This is the ground-truth utility, i.e., the true utility
     print(f"Ground-truth utility for paths in P: {np.max(ground_utility)}")
 
@@ -131,5 +131,5 @@ def outer(G, S, T, d):
     elapsed_seconds = (end - start)
     print("Outer-loop time elapsed in seconds: " + str(elapsed_seconds))
 
-    return t, p_star, val_vector_p_star, P
+    return t, p_star, val_vector_p_star, P, val_p
 
