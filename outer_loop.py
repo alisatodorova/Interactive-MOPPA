@@ -59,7 +59,7 @@ def outer(G, S, T, d):
     user_preference = utils_user.UserPreference(num_objectives=2, std_noise=0.1, seed=123)  # seed=123
     add_noise = True
     ground_utility = user_preference.get_preference(val_p, add_noise=add_noise)  # This is the ground-truth utility, i.e., the true utility
-    print(f"Ground-truth utility for paths in P: {np.max(ground_utility)}")
+    # print(f"Ground-truth utility for paths in P: {np.max(ground_utility)}")
 
     # Add the comparisons to the GP
     comparisons = dataset.DatasetPairwise(num_objectives=2)
@@ -80,7 +80,6 @@ def outer(G, S, T, d):
     input_domain = np.array(C_array)  # set of Candidate targets
     acq_fun = acquisition_function.DiscreteAcquirer(input_domain=input_domain, query_type='ranking', seed=123, acquisition_type='expected improvement')
 
-    # while C:
     while len(C_array) != 0:
         # Pick the Candidate target which has the highest value from the acquisition function
         expected_improvement = acquisition_function.get_expected_improvement(input_domain, gp, acq_fun.history)
@@ -107,7 +106,8 @@ def outer(G, S, T, d):
             compare_pt_pstar = val_p_t.copy()
             compare_pt_pstar.extend(val_vector_p_star)
             ranking_new_paths = user_preference.get_preference(compare_pt_pstar, add_noise=add_noise)
-            print(f"Utility for p*: {np.max(ranking_new_paths)}")
+            p_star_utility = np.max(ranking_new_paths)
+            print(f"Utility for p*: {p_star_utility}")
 
             # Add the comparisons to the GP
             comparisons.add_single_comparison(compare_pt_pstar[np.argmax(ranking_new_paths)], compare_pt_pstar[np.argmin(ranking_new_paths)])
@@ -131,5 +131,5 @@ def outer(G, S, T, d):
     elapsed_seconds = (end - start)
     print("Outer-loop time elapsed in seconds: " + str(elapsed_seconds))
 
-    return t, p_star, val_vector_p_star, P, val_p
+    return t, p_star, val_vector_p_star, p_star_utility, P, val_p
 
