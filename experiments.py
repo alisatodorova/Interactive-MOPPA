@@ -2,10 +2,12 @@
 import geopandas as gpd
 import momepy
 import networkx as nx
+import numpy as np
 from matplotlib import colors
 import matplotlib.pyplot as plt
 import matplotlib
 import outer_loop
+from lmzintgraf_gp_pref_elicit.gp_utilities import utils_user
 
 # Legend
 legend_text = []
@@ -19,72 +21,44 @@ new_cmap = colors.ListedColormap(new_cmap)
 fig, ax = plt.subplots(figsize=(14, 14), dpi=600)
 
 # Map
-map_amsterdam = gpd.read_file("Sidewalk_width_crossings_smaller.geojson")
+map_amsterdam = gpd.read_file("Sidewalk_width_crossings.geojson")
 
 # Objectives
 objectives = ('length', 'crossing')
-# objectives = ('length', '0.9-1.8m')
-# objectives = ('length', '1.8-2.9m')
-# objectives = ('length', '<0.9m')
-# objectives = ('length', '>2.9m')
 
 # Create a NetworkX graph from the map
 G = momepy.gdf_to_nx(map_amsterdam, approach='primal')
 
-
-#Smaller map: ~800 nodes
-#ex1:
-S = (122245.37633330293, 486126.8581684635) #very first node
-T = (122320.31466476223, 486327.5294561802)
-
-#ex2:
-# S = (122245.37633330293, 486126.8581684635) #very first node
-# T = (122320.31466476223, 486327.5294561802)
-
-# S = (122245.37633330293, 486126.8581684635)
-# T = (122384.20250442973, 486270.65737816785) #AxisError
-
-#Small map: radius 250m and 1000 nodes
-# ex6
-# S = (120549.11715177551, 486040.41438763676) #not very first node
-# T = (120939.06590611176, 485820.4983572203)
-
-#ex7
-# S = (120548.6120283842, 486088.19577846595) #vey first
-# T = (121015.06629881046, 485829.2834579833) #very last
-
 #Full map ~11401 nodes and radius 800m
-#ex1
-# S = (119998.5393221767, 485722.64175419795) #very first
-# T = (121544.5105401219, 486594.5264401745) #very last
+S = (119998.5393221767, 485722.64175419795) # very first
+T = (121544.5105401219, 486594.5264401745) # very last
 
-#ex2 ~0.5km distance
-# S = (120107.50109162027, 485143.8697083206)
-# T = (120016.87004460393, 485271.50645493163)
-
-#ex3 ~ 1.4km distance
-# S = (120522.88677087355, 485884.8214429696)
-# T = (120773.95779829, 485200.20212105685)
-
-#ex
-# S = (120722.03948820339, 485331.8028751559)
-# T = (121552.83295955718, 485778.4098562119)
+#Small map
+# S = (120548.6120283842, 486088.19577846595)
+# T = (121015.06629881046, 485829.2834579833)
 
 # Distance between S and T
-for i in objectives:
-    p_ST = nx.shortest_path(G, source=S, target=T, weight=i, method='dijkstra')  # Dijkstra's algorithm
-    # Computes the total cost associated with the path and objective, i.e., the value of the path
-    distance = nx.path_weight(G, path=p_ST, weight='length')
+p_ST = nx.shortest_path(G, source=S, target=T, weight='length', method='dijkstra')  # Dijkstra's algorithm
+# Computes the total cost associated with the path and objective, i.e., the value of the path
+distance = nx.path_weight(G, path=p_ST, weight='length')
 print(f"Distance between S and T is {distance*0.001}km.")
 
 # The path from our proposed algorithm
-t, p_star, val_vector_p_star, P = outer_loop.outer(G, S, T, objectives)
-print(f"Target {t}; Path {p_star} with cost {val_vector_p_star}")
+t, p_star, val_vector_p_star, p_star_utility, P, val_p = outer_loop.outer(G, S, T, objectives)
+print(f"Target {t}; Path with cost {val_vector_p_star}")
 
 # Alternative paths from the Pareto set P
 for i, path in enumerate(P):
     if path != p_star:
-        print(f"Alternative path {i}:", path)
+        print(f"Alternative path {i} with cost {val_p}")
+
+# pvi_paths = [(757.2800000000002, 4.0)]
+# user_preference = utils_user.UserPreference(num_objectives=2, std_noise=0.1, seed=123)  # seed=123
+# add_noise = False
+# PVI_utility = user_preference.get_preference(pvi_paths, add_noise=add_noise)
+# print(f"Ground-truth utility for paths from PVI: {np.max(PVI_utility)}")
+# regret = np.subtract(np.max(PVI_utility), p_star_utility)
+# print(f"Regret:{regret}")  # The difference in utility between the path we recommend in the end and an optimal path.
 
 
 ### Plot experiments ###
@@ -137,6 +111,6 @@ ax.legend(handles=all_handles, labels=all_labels, loc='upper left')
 
 # Save the image
 folder_path = 'experiments'
-file_name = 'ex70.png'
+file_name = 'ex28.png'
 file_path = folder_path + '/' + file_name
 plt.savefig(file_path, bbox_inches='tight')
