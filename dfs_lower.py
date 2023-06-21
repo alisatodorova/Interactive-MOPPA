@@ -33,6 +33,7 @@ def dfs_lower(G, S, T, t, U, max_iter=None):
 
     current_best_path = []
 
+    # while i in range(max_iter):
     while stack:
         current_node, current_cost, path = stack.pop()  # current_cost is the total cost up to the current_node
 
