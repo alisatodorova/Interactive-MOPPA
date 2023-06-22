@@ -1,11 +1,12 @@
 """
 Multi-Objective Value Iteration:
 \mathcal{V}_{n} \gets Prune \left({\bigcup}_{n' \in N_G(n)} \overrightarrow{c} (n,n')+\mathcal{V}_{n'}\right)
-where for Prune we follow the methods pareto_dominates and p_prune from
+where for Prune we follow the methods pareto_dominates, p_prune and pvi from
 Roijers, D. M., Röpke, W., Nowe, A., & Radulescu, R. (2021).
 On Following Pareto-Optimal Policies in Multi-Objective Planning and Reinforcement Learning.
 Paper presented at Multi-Objective Decision Making Workshop 2021.
 http://modem2021.cs.nuigalway.ie/papers/MODeM_2021_paper_3.pdf
+https://github.com/rradules/POP-following/tree/main
 """
 
 import copy
@@ -121,6 +122,3 @@ def pvi(G, T, objectives):
 
     return nd_vectors
 
-# To run:
-# pvi_result = pvi(G, T, objectives) # objectives = ('length', 'crossing')
-# print(pvi_result)

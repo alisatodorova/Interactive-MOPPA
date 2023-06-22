@@ -1,5 +1,5 @@
 """
-Outer-loop: Selecting the target region
+Outer-loop: Selects a target region, in which we search for new paths that have likely preferred value vectors
 
 Note: The Gaussian process and Acquisition function are used as blackboxes from
 "Ordered Preference Elicitation Strategies for Supporting Multi-Objective Decision Making"

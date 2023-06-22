@@ -43,7 +43,7 @@ p_ST = nx.shortest_path(G, source=S, target=T, weight='length', method='dijkstra
 distance = nx.path_weight(G, path=p_ST, weight='length')
 print(f"Distance between S and T is {distance*0.001}km.")
 
-# The path from our proposed algorithm
+# The path from my proposed algorithm
 t, p_star, val_vector_p_star, p_star_utility, P, val_p = outer_loop.outer(G, S, T, objectives)
 print(f"Target {t}; Path with cost {val_vector_p_star}")
 
