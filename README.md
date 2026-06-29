@@ -2,11 +2,14 @@
 ## Bachelor Thesis by Alisa Todorova
 
 ## Context
-My Bachelor thesis and research has been done in the context of a research internship at the Urban Innovation and R&D department of the City of Amsterdam.
-The motivation behind my research is to make Amsterdam more accessible. The end goal of the big project that my research is part of, is to create a highly user-dependent app for Amsterdam citizens with mobility issues and those who use assistive devices (i.e., wheelchairs, strollers, canes). 
-This app should find the user the most accessible sidewalks, with respect to their specific needs. 
+This thesis was prepared in partial fulfilment of the requirements for the Degree of Bachelor of Science in Data Science and Artificial Intelligence, Maastricht University. This research was done in the context of a research internship at the Urban Innovation and R&D department of the City of Amsterdam.
+The motivation behind my research is to make Amsterdam more accessible. The end goal of the big project that my research is part of, is to create a highly user-dependent app for Amsterdam citizens with mobility issues and those who use assistive devices (i.e., wheelchairs, strollers, canes). This app should find the user the most accessible sidewalks, with respect to their specific needs. 
 
 I propose a new method that leverages the power of Gaussian Processes and an interactive approach to quickly generate likely preferred solutions (i.e., paths) without computing the entire Pareto Front.
+
+## Abstract
+This paper addresses the multi-objective shortest path problem (MOSPP) in a transportation routing setting. The
+goal of much research on MOSPPs has been on computing the full Pareto set, i.e., the set containing all possible optimal solutions (i.e., Pareto-optimal paths) which have different optimal tradeoffs (i.e., best compromises) between the given objectives. We propose an algorithm which finds a Pareto-optimal path for each individual user without having to compute the entire Pareto front. Our algorithm consists of two parts: an outer-loop, which helps us select a target region (i.e., a part of value space that is likely to contain possible value vectors (and their associated paths) preferred by the user), and an inner-loop, which finds a path from that target region. We test our algorithm on a map of Amsterdam. Our algorithm always finds a Pareto-optimal path that lies in the target region.
 
 ## Installation
 1. Download and extract the zip file.
